@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Mundo del Fútbol ⚽</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to bottom, #e6f0ea, #c8e0cc);
+    color: #000;
+  }
+
+  /* ==== MENÚ ==== */
+  nav {
+    background: linear-gradient(135deg, #003366, #004d99);
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 15px;
+    border-bottom: 4px solid #ffd700;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  nav a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: 0.3s;
+  }
+  nav a:hover, nav a.active {
+    background: #ffd700;
+    color: #003366;
+  }
+
+  section { display: none; padding: 40px 0; }
+  section.active { display: block; }
+
+  h1, h2 { font-family: 'Playfair Display', serif; }
+
+  footer {
+    background: #00264d;
+    color: #ddd;
+    text-align: center;
+    padding: 15px;
+    font-size: 14px;
+    border-top: 3px solid #ffd700;
+    margin-top: 50px;
+  }
+
+  .content-box {
+    width: 80%;
+    margin: 30px auto;
+    background: rgba(255,255,255,0.9);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+
+  .content-box img {
+    display: block;
+    margin: 25px auto;
+    max-width: 400px;
+    border-radius: 10px;
+  }
+
+  /* Juego */
+  #gameCanvas {
+    background: #006400;
+    display: block;
+    margin: 20px auto;
+    border: 4px solid #fff;
+    border-radius: 10px;
+  }
+
+  #resetBtn {
+    display: block;
+    margin: 10px auto;
+    padding: 8px 16px;
+    font-size: 16px;
+    background: #ffcc00;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  #resetBtn:hover { background: #ffdb4d; }
+
+  /* Formulario */
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    padding: 30px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  form { display: grid; gap: 12px; }
+  label { font-weight: 600; }
+  input, select {
+    width: 100%; padding: 10px;
+    border-radius: 8px; border: 1px solid #ccc;
+  }
+  .btn {
+    background: #004d99; color: #fff;
+    border: none; padding: 10px 14px;
+    border-radius: 8px; cursor: pointer;
+  }
+  .btn:hover { background: #0066cc; }
+
+  .msg {
+    padding: 10px; border-radius: 8px; font-size: 14px;
+  }
+  .msg.error { background: #ffe0e0; color: #a00; }
+  .msg.success { background: #e0ffe5; color: #060; }
+</style>
+</head>
+<body>
+
+<!-- 🔹 MENÚ -->
+<nav>
+  <a href="#" class="active" data-section="info">🏟️ Inicio</a>
+  <a href="#" data-section="juego">🎮 Juego de Penales</a>
+  <a href="#" data-section="registro">📝 Registro</a>
+</nav>
+
+<!-- 🔹 SECCIÓN 1 -->
+<section id="info" class="active">
+  <div class="content-box">
+    <h1>El Mundo del Fútbol</h1>
+    <p>El fútbol es pasión, estrategia, técnica y unión. Es el deporte que mueve millones de corazones alrededor del mundo.</p>
+
+    <h2>Jugadores Legendarios</h2>
+    <ul>
+      <li><strong>Lionel Messi</strong> — El genio argentino, campeón mundial 2022.</li>
+      <li><strong>Cristiano Ronaldo</strong> — Fuerza, disciplina y talento portugués.</li>
+      <li><strong>Pelé</strong> — El “Rey” brasileño, tres veces campeón mundial.</li>
+      <li><strong>Diego Maradona</strong> — El ídolo eterno de Argentina.</li>
+    </ul>
+    <img src="https://static.vecteezy.com/system/resources/previews/027/829/024/non_2x/close-up-of-many-soccer-players-kicking-a-football-on-a-field-competition-scene-created-with-generative-ai-technology-photo.jpg" alt="Fútbol">
+
+    <ul>
+      <li>Más información: 3042256121</li>
+      <li>Emily Mendoza</li>
+      <li>Genesis Gerdet</li>
+      <li>Yonier Granda</li>
+      <li>Maria de los Angeles</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 🔹 SECCIÓN 2 -->
+<section id="juego">
+  <div class="content-box" style="text-align:center;">
+    <h2>⚽ Juego de Penales ⚽</h2>
+    <canvas id="gameCanvas" width="800" height="500"></canvas>
+    <div id="infoJuego">Goles: <span id="score">0</span></div>
+    <button id="resetBtn">Reiniciar</button>
+  </div>
+</section>
+
+<!-- 🔹 SECCIÓN 3 -->
+<section id="registro">
+  <div class="card">
+    <h2>Formulario de Registro</h2>
+    <div id="messageArea"></div>
+    <form id="regForm" novalidate>
+      <label>Nombre</label>
+      <input id="firstName" required>
+
+      <label>Apellido</label>
+      <input id="lastName" required>
+
+      <label>Correo electrónico</label>
+      <input id="email" type="email" required>
+
+      <label>Contraseña</label>
+      <input id="password" type="password" required>
+
+      <label>Confirmar contraseña</label>
+      <input id="confirmPassword" type="password" required>
+
+      <label><input type="checkbox" id="terms"> Acepto los términos</label>
+
+      <button class="btn" type="submit">Crear cuenta</button>
+      <button class="btn" type="button" id="clearBtn">Limpiar</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  © 2025 • Proyecto Educativo de Fútbol — HTML, CSS y JS
+</footer>
+
+<script>
+/* ===== MENÚ ===== */
+const links = document.querySelectorAll('nav a');
+const sections = document.querySelectorAll('section');
+links.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    links.forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+    sections.forEach(s => s.classList.remove('active'));
+    document.getElementById(link.dataset.section).classList.add('active');
+  });
+});
+
+/* ===== JUEGO ===== */
+const canvas = document.getElementById("gameCanvas");
+if (canvas) {
+  const ctx = canvas.getContext("2d");
+  const scoreDisplay = document.getElementById("score");
+  const resetBtn = document.getElementById("resetBtn");
+  let ball = { x: 400, y: 400, r: 10, vx: 0, vy: 0, moving: false };
+  let mouse = { x: 400, y: 200 };
+  let power = 3.5;
+  let score = 0;
+  let defenders = [];
+  let maxDefenders = 5;
+  let defenderSpeed = 1.5;
+
+  canvas.addEventListener("contextmenu", e => e.preventDefault());
+  canvas.addEventListener("mousemove", e => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+  canvas.addEventListener("mousedown", e => {
+    if (e.button === 2 && !ball.moving) shootBall();
+  });
+  resetBtn.addEventListener("click", () => resetGame());
+
+  function resetGame() {
+    score = 0;
+    defenders = [];
+    defenderSpeed = 1.5;
+    maxDefenders = 5;
+    resetBall();
+    scoreDisplay.textContent = score;
+  }
+  function resetBall() {
+    ball.x = 400; ball.y = 400; ball.vx = 0; ball.vy = 0; ball.moving = false;
+  }
+  function shootBall() {
+    const dx = mouse.x - ball.x;
+    const dy = mouse.y - ball.y;
+    const mag = Math.sqrt(dx * dx + dy * dy);
+    ball.vx = (dx / mag) * power * 5;
+    ball.vy = (dy / mag) * power * 5;
+    ball.moving = true;
+  }
+  function spawnDefenders() {
+    defenders = [];
+    for (let i = 0; i < maxDefenders; i++) {
+      defenders.push({x: 320 + Math.random() * 150, y: 150 + i * 50, w: 30, h: 40, dir: Math.random() < 0.5 ? 1 : -1});
+    }
+  }
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#006400"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = "white"; ctx.lineWidth = 5; ctx.strokeRect(300, 50, 200, 100);
+    ctx.beginPath(); ctx.moveTo(250, 400); ctx.lineTo(550, 400); ctx.stroke();
+    ctx.fillStyle = "red"; defenders.forEach(d => ctx.fillRect(d.x, d.y, d.w, d.h));
+    ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+    ctx.fillStyle = "white"; ctx.fill(); ctx.stroke();
+    if (!ball.moving) { ctx.beginPath(); ctx.moveTo(ball.x, ball.y); ctx.lineTo(mouse.x, mouse.y); ctx.strokeStyle = "yellow"; ctx.stroke(); }
+  }
+  function updateDefenders() {
+    defenders.forEach(d => { d.x += d.dir * defenderSpeed; if (d.x <= 250 || d.x + d.w >= 550) d.dir *= -1; });
+  }
+  function checkCollisions() {
+    for (let d of defenders) {
+      if (ball.x + ball.r > d.x && ball.x - ball.r < d.x + d.w && ball.y + ball.r > d.y && ball.y - ball.r < d.y + d.h) {
+        resetBall(); return true;
+      }
+    }
+    return false;
+  }
+  function updateBall() {
+    if (ball.moving) {
+      ball.x += ball.vx; ball.y += ball.vy;
+      if (ball.y < 150 && ball.x > 300 && ball.x < 500) {
+        score++; scoreDisplay.textContent = score;
+        if (score % 5 === 0 && maxDefenders < 10) { maxDefenders++; defenderSpeed += 0.2; }
+        spawnDefenders(); resetBall();
+      }
+      if (ball.y < 0 || ball.x < 0 || ball.x > canvas.width) resetBall();
+      checkCollisions();
+    }
+  }
+  function loop() { draw(); updateBall(); updateDefenders(); requestAnimationFrame(loop); }
+  spawnDefenders(); loop();
+}
+
+/* ===== REGISTRO ===== */
+(() => {
+  const form = document.getElementById('regForm');
+  const msgArea = document.getElementById('messageArea');
+  const pwd = document.getElementById('password');
+  const confirmPwd = document.getElementById('confirmPassword');
+  const clearBtn = document.getElementById('clearBtn');
+
+  function showMessage(text, type='error'){
+    msgArea.innerHTML = `<div class="msg ${type}">${text}</div>`;
+  }
+
+  clearBtn.addEventListener('click', () => {form.reset(); msgArea.innerHTML='';});
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const data = {
+      firstName: form.firstName.value.trim(),
+      lastName: form.lastName.value.trim(),
+      email: form.email.value.trim(),
+      password: pwd.value,
+      confirmPassword: confirmPwd.value,
+      terms: form.terms.checked
+    };
+    if(!data.firstName || !data.lastName) return showMessage('Completa nombre y apellido');
+    if(!/^\S+@\S+\.\S+$/.test(data.email)) return showMessage('Correo inválido');
+    if(data.password.length < 8) return showMessage('Contraseña mínima de 8 caracteres');
+    if(data.password !== data.confirmPassword) return showMessage('Las contraseñas no coinciden');
+    if(!data.terms) return showMessage('Debes aceptar los términos');
+    showMessage('Registro completado ✅', 'success');
+    form.reset();
+  });
+})();
+</script>
+</body>
+</html>
